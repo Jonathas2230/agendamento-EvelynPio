@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento - Evelyn Pio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rosegold': {
+                            '50': '#fff8f7',
+                            '100': '#ffefee',
+                            '200': '#f8d5d2',
+                            '300': '#f3bdb8',
+                            '400': '#e79a92',
+                            '500': '#d9776e',
+                            '600': '#c55e54',
+                            '700': '#a44d44',
+                            '800': '#863f38',
+                            '900': '#6b332c',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #faf9f8;
+        }
+        
+        .form-section {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.95) 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(217, 119, 110, 0.3);
+        }
+        
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        
+        .logo {
+            background: linear-gradient(45deg, #d9776e, #a44d44);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        #multiDayFields, #singleDayFields {
+            transition: opacity 0.3s ease, max-height 0.5s ease;
+            overflow: hidden;
+        }
+        
+        .hidden-fields {
+            opacity: 0;
+            max-height: 0;
+        }
+        
+        .visible-fields {
+            opacity: 1;
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4 px-6 lg:px-12">
+        <div class="container mx-auto flex justify-center">
+            <h1 class="text-2xl font-bold logo">EVELYN PIO</h1>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-12 px-6 lg:px-0 bg-gradient-to-b from-rosegold-100 to-white">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Agende um Evento</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Preencha o formulário abaixo para solicitar a participação de Evelyn Pio em seu evento ou culto.</p>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <main class="flex-grow py-8 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <div class="form-section rounded-xl shadow-lg overflow-hidden">
+                <div class="p-6 md:p-8 bg-white">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-1">Formulário de Agendamento</h3>
+                    <p class="text-gray-600 mb-6">Todos os campos são obrigatórios</p>
+                    
+                    <form id="eventForm" class="space-y-6">
+                        <!-- Contact Information -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-medium text-gray-800 border-b border-rosegold-200 pb-2">Informações do Solicitante</h4>
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo*</label>
+                                <input type="text" id="name" name="name" required 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                            </div>
+                            <div>
+                                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Cargo/Representação*</label>
+                                <input type="text" id="role" name="role" placeholder="Pastor, Líder de Jovens, etc." required 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- Event Type -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-medium text-gray-800 border-b border-rosegold-200 pb-2">Detalhes do Evento</h4>
+                            <div>
+                                <label for="eventType" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Evento*</label>
+                                <select id="eventType" name="eventType" required 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all appearance-none">
+                                    <option value="" disabled selected>Selecione uma opção</option>
+                                    <option value="Culto">Culto</option>
+                                    <option value="Congresso">Congresso</option>
+                                    <option value="Vigília">Vigília</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                            <div id="otherEventTypeContainer" class="hidden mt-2">
+                                <label for="otherEventType" class="block text-sm font-medium text-gray-700 mb-1">Especifique o tipo de evento*</label>
+                                <input type="text" id="otherEventType" name="otherEventType" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                            </div>
+                            
+                            <!-- Dynamic Event Date Fields -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duração do Evento*</label>
+                                <div class="flex space-x-4 mb-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="eventDuration" value="single" checked 
+                                            class="h-4 w-4 text-rosegold-600 focus:ring-rosegold-500 transition-all" id="singleDayRadio">
+                                        <span class="ml-2 text-gray-700">1 dia</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="eventDuration" value="multi" 
+                                            class="h-4 w-4 text-rosegold-600 focus:ring-rosegold-500 transition-all" id="multiDayRadio">
+                                        <span class="ml-2 text-gray-700">2 dias ou mais</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Single Day Fields (Visible by default) -->
+                                <div id="singleDayFields" class="visible-fields space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label for="singleDate" class="block text-sm font-medium text-gray-700 mb-1">Data*</label>
+                                            <input type="date" id="singleDate" name="singleDate" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                        <div>
+                                            <label for="startTime" class="block text-sm font-medium text-gray-700 mb-1">Horário de Início*</label>
+                                            <input type="time" id="startTime" name="startTime" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                        <div>
+                                            <label for="endTime" class="block text-sm font-medium text-gray-700 mb-1">Horário de Término*</label>
+                                            <input type="time" id="endTime" name="endTime" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Multi Day Fields (Hidden by default) -->
+                                <div id="multiDayFields" class="hidden-fields space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Data Inicial*</label>
+                                            <input type="date" id="startDate" name="startDate" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                        <div>
+                                            <label for="startTimeMulti" class="block text-sm font-medium text-gray-700 mb-1">Horário Inicial*</label>
+                                            <input type="time" id="startTimeMulti" name="startTimeMulti" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">Data Final*</label>
+                                            <input type="date" id="endDate" name="endDate" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                        <div>
+                                            <label for="endTimeMulti" class="block text-sm font-medium text-gray-700 mb-1">Horário Final*</label>
+                                            <input type="time" id="endTimeMulti" name="endTimeMulti" 
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Location Fields -->
+                            <div class="space-y-4">
+                                <h5 class="font-medium text-gray-800">Local do Evento*</h5>
+                                <div>
+                                    <label for="venueName" class="block text-sm font-medium text-gray-700 mb-1">Nome do Espaço/Igreja*</label>
+                                    <input type="text" id="venueName" name="venueName" required 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="md:col-span-2">
+                                        <label for="street" class="block text-sm font-medium text-gray-700 mb-1">Rua*</label>
+                                        <input type="text" id="street" name="street" required 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label for="number" class="block text-sm font-medium text-gray-700 mb-1">Número*</label>
+                                        <input type="text" id="number" name="number" required 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label for="neighborhood" class="block text-sm font-medium text-gray-700 mb-1">Bairro*</label>
+                                        <input type="text" id="neighborhood" name="neighborhood" required 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">Cidade*</label>
+                                        <input type="text" id="city" name="city" required 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                                    </div>
+                                    <div>
+                                        <label for="state" class="block text-sm font-medium text-gray-700 mb-1">Estado*</label>
+                                        <select id="state" name="state" required 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all appearance-none">
+                                            <option value="" disabled selected>Selecione</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Equipment Information -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">O local disponibiliza instrumentos ou equipamentos musicais?*</label>
+                                <div class="flex space-x-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="equipment" value="Sim" required 
+                                            class="h-4 w-4 text-rosegold-600 focus:ring-rosegold-500 transition-all">
+                                        <span class="ml-2 text-gray-700">Sim</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="equipment" value="Não" 
+                                            class="h-4 w-4 text-rosegold-600 focus:ring-rosegold-500 transition-all">
+                                        <span class="ml-2 text-gray-700">Não</span>
+                                    </label>
+                                </div>
+                                <div id="equipmentDetails" class="hidden mt-2">
+                                    <label for="equipmentDescription" class="block text-sm font-medium text-gray-700 mb-1">Quais equipamentos?</label>
+                                    <textarea id="equipmentDescription" name="equipmentDescription" rows="2" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all"></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Social Media -->
+                            <div>
+                                <label for="socialMedia" class="block text-sm font-medium text-gray-700 mb-1">Redes sociais do evento/igreja (opcional)</label>
+                                <input type="text" id="socialMedia" name="socialMedia" 
+                                    placeholder="@usuario ou link" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all">
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Notes -->
+                        <div class="space-y-2">
+                            <label for="additionalInfo" class="block text-sm font-medium text-gray-700 mb-1">Informações adicionais (opcional)</label>
+                            <textarea id="additionalInfo" name="additionalInfo" rows="3" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-rosegold-500 transition-all"></textarea>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="pt-4">
+                            <button type="submit" 
+                                class="w-full md:w-auto px-8 py-3 bg-rosegold-600 hover:bg-rosegold-700 text-white font-medium rounded-lg shadow-md transition-all transform hover:-translate-y-1">
+                                Enviar Agendamento <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 py-8 px-6 border-t border-gray-200">
+        <div class="container mx-auto max-w-4xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold logo">EVELYN PIO</h2>
+                    <p class="text-gray-600 mt-2">Ministério de Adoração</p>
+                </div>
+                
+                <div class="space-y-2">
+                    <h3 class="text-lg font-medium text-gray-800">Redes Sociais</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.youtube.com/@EvelynPio" target="_blank" 
+                            class="text-gray-600 hover:text-rosegold-600 transition-all text-xl">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.instagram.com/evelynpio_/" target="_blank" 
+                            class="text-gray-600 hover:text-rosegold-600 transition-all text-xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://open.spotify.com/intl-pt/artist/3FUUy6kvfWtvSW2xOt5upq" target="_blank" 
+                            class="text-gray-600 hover:text-rosegold-600 transition-all text-xl">
+                            <i class="fab fa-spotify"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
+                <p>© 2023 Evelyn Pio. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show/hide equipment details based on radio selection
+        document.querySelectorAll('input[name="equipment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const equipmentDetails = document.getElementById('equipmentDetails');
+                if (this.value === 'Sim') {
+                    equipmentDetails.classList.remove('hidden');
+                    document.getElementById('equipmentDescription').removeAttribute('disabled');
+                } else {
+                    equipmentDetails.classList.add('hidden');
+                    document.getElementById('equipmentDescription').setAttribute('disabled', 'disabled');
+                }
+            });
+        });
+
+        // Toggle between single day and multi-day fields
+        document.getElementById('singleDayRadio').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('singleDayFields').classList.remove('hidden-fields');
+                document.getElementById('singleDayFields').classList.add('visible-fields');
+                document.getElementById('multiDayFields').classList.remove('visible-fields');
+                document.getElementById('multiDayFields').classList.add('hidden-fields');
+                
+                // Clear multi-day fields when switching
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+            }
+        });
+
+        document.getElementById('multiDayRadio').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('multiDayFields').classList.remove('hidden-fields');
+                document.getElementById('multiDayFields').classList.add('visible-fields');
+                document.getElementById('singleDayFields').classList.remove('visible-fields');
+                document.getElementById('singleDayFields').classList.add('hidden-fields');
+                
+                // Clear single day fields when switching
+                document.getElementById('singleDate').value = '';
+                document.getElementById('startTime').value = '';
+                document.getElementById('endTime').value = '';
+            }
+        });
+
+        // Form submission to WhatsApp
+        // Show/hide other event type field
+        document.getElementById('eventType').addEventListener('change', function() {
+            const otherContainer = document.getElementById('otherEventTypeContainer');
+            if (this.value === 'Outro') {
+                otherContainer.classList.remove('hidden');
+                document.getElementById('otherEventType').setAttribute('required', 'required');
+            } else {
+                otherContainer.classList.add('hidden');
+                document.getElementById('otherEventType').removeAttribute('required');
+                document.getElementById('otherEventType').value = '';
+            }
+        });
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const role = document.getElementById('role').value;
+            let eventType = document.getElementById('eventType').value;
+            if (eventType === 'Outro') {
+                eventType = document.getElementById('otherEventType').value;
+            }
+            
+            // Get event dates based on selection
+            let eventDates = '';
+            if (document.getElementById('singleDayRadio').checked) {
+                const singleDate = document.getElementById('singleDate').value;
+                const startTime = document.getElementById('startTime').value;
+                const endTime = document.getElementById('endTime').value;
+                const dateObj = new Date(singleDate);
+                const formattedDate = dateObj.toLocaleDateString('pt-BR');
+                eventDates = `${formattedDate}, das ${startTime} às ${endTime}`;
+            } else {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const startDateObj = new Date(startDate);
+                const endDateObj = new Date(endDate);
+                const startTimeMulti = document.getElementById('startTimeMulti').value;
+                const endTimeMulti = document.getElementById('endTimeMulti').value;
+                const formattedStart = startDateObj.toLocaleDateString('pt-BR');
+                const formattedEnd = endDateObj.toLocaleDateString('pt-BR');
+                eventDates = `De ${formattedStart} ${startTimeMulti} a ${formattedEnd} ${endTimeMulti}`;
+            }
+            
+            const venueName = document.getElementById('venueName').value;
+            const street = document.getElementById('street').value;
+            const number = document.getElementById('number').value;
+            const neighborhood = document.getElementById('neighborhood').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            
+            const fullAddress = `${street}, ${number} - ${neighborhood}, ${city}/${state}`;
+            
+            const equipment = document.querySelector('input[name="equipment"]:checked').value;
+            let equipmentDetails = '';
+            if (equipment === 'Sim') {
+                equipmentDetails = document.getElementById('equipmentDescription').value;
+            }
+            
+            const socialMedia = document.getElementById('socialMedia').value;
+            const additionalInfo = document.getElementById('additionalInfo').value;
+            
+            // Construct WhatsApp message
+            let message = `*NOVO PEDIDO DE AGENDAMENTO - EVELYN PIO*%0A%0A`;
+            message += `*Solicitante:* ${name}%0A`;
+            message += `*Cargo/Representação:* ${role}%0A%0A`;
+            message += `*Tipo de Evento:* ${eventType}%0A`;
+            message += `*Data(s) do Evento:* ${eventDates}%0A%0A`;
+            message += `*Local do Evento:*%0A`;
+            message += `${venueName}%0A`;
+            message += `${fullAddress}%0A%0A`;
+            message += `*Equipamentos disponíveis:* ${equipment}`;
+            if (equipmentDetails) {
+                message += ` (${equipmentDetails})`;
+            }
+            message += `%0A%0A`;
+            
+            if (socialMedia) {
+                message += `*Redes Sociais:* ${socialMedia}%0A`;
+            }
+            if (additionalInfo) {
+                message += `*Informações Adicionais:* ${additionalInfo}%0A`;
+            }
+            
+            // Open WhatsApp with the message
+            const phoneNumber = '5581989550769';
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+        });
+    </script>
+</body>
+</html>
