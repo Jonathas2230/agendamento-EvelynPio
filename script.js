@@ -106,7 +106,7 @@
             const additionalInfo = document.getElementById('additionalInfo').value;
             
             // Construct WhatsApp message
-            let message = `*NOVO PEDIDO DE AGENDAMENTO - EVELYN PIO*%0A%0A`;
+            let message = `*FORMULARIO DE AGENDAMENTO - EVELYN PIO*`;
             message += `*Solicitante:* ${name}%0A`;
             message += `*Cargo/Representação:* ${role}%0A`;
             message += `*Telefone:* ${phone}%0A%0A`;
@@ -122,7 +122,7 @@
             message += `%0A%0A`;
             
             if (socialMedia) {
-                message += `*Redes Sociais:* ${socialMedia}%0A`;
+                message += `*Redes Sociais:* ${socialMedia}%0A%0A`;
             }
             if (additionalInfo) {
                 message += `*Informações Adicionais:* ${additionalInfo}%0A`;
