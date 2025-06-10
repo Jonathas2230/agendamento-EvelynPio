@@ -106,7 +106,7 @@
             const additionalInfo = document.getElementById('additionalInfo').value;
             
             // Construct WhatsApp message
-            let message = `*FORMULARIO DE AGENDAMENTO - EVELYN PIO%0A%0A%0A*`;
+            let message = `*FORMULARIO DE AGENDAMENTO - EVELYN PIO*%0A%0A%0A`;
             message += `*Solicitante:* ${name}%0A`;
             message += `*Cargo/Representação:* ${role}%0A`;
             message += `*Telefone:* ${phone}%0A%0A`;
