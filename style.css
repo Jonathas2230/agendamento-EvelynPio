@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+header{
+    width: 100%;
+    height: 100px;
+    /* border: blue; 
+    border-style: double; */
+    display: flex;
+    align-items: center;
+}
+
+.logo-top{
+    height: 100%;
+    /* border: red; 
+    border-style: double; */
+    align-items: center;
+    margin-left: 10%;
+}
+
+h1{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #faf9f8;
+}
+
+.form-section {
+    background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.95) 100%);
+    backdrop-filter: blur(10px);
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(217, 119, 110, 0.3);
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.logo {
+    background: linear-gradient(45deg, #d9776e, #a44d44);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#multiDayFields, #singleDayFields {
+    transition: opacity 0.3s ease, max-height 0.5s ease;
+    overflow: hidden;
+}
+
+.hidden-fields {
+    opacity: 0;
+    max-height: 0;
+}
+
+.visible-fields {
+    opacity: 1;
+    max-height: 500px;
+}
+
+@media screen and (max-width: 800px) {
+
+    .logo-top{
+        margin: auto;
+    }
+
+    h1{
+        display: none;
+    }
+}
