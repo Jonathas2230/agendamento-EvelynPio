@@ -73,11 +73,23 @@ input:focus, textarea:focus, select:focus {
 
 @media screen and (max-width: 800px) {
 
+    header{
+        display: block;
+        height: 250px;
+    }
+
     .logo-top{
+        margin-top: 100px;
         margin: auto;
+        height: 200px;
     }
 
     h1{
-        display: none;
+        margin-bottom: 100px;
     }
+
+    #player-musica{
+    
+    margin-top: 50px;
+}
 }
